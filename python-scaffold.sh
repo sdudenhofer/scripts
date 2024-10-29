@@ -18,7 +18,9 @@ while true; do
     ;;
   [Nn]*)
     echo "skipping uv initialization..."
+    exit
     ;;
   *) echo "Must answer either yes or no" ;;
   esac
 done
+exit

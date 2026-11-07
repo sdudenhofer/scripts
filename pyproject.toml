@@ -2,4 +2,7 @@
 name = "scripts"
 version = "0.1.0"
 requires-python = ">=3.15"
-dependencies = []
+dependencies = [
+    "gitpython>=3.2.1",
+    "watchdog>=7.1.0",
+]

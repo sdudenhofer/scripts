@@ -5,10 +5,6 @@ import git
 
 class watchFile:
     folder_location = "/home/sethd/Documents/obsidian/Personal"    
-    repo = git.Repo(folder_location)
-    existing_branch = repo.heads('main')
-    origin = repo.remote(name="origin")
-
 
     def __init__(self):
         self.observer = Observer()
@@ -17,24 +13,29 @@ class watchFile:
         handler = Handler()
         self.observer.schedule(handler, self.folder_location, recursive=True)
         self.observer.start()
-
+        return self.folder_location
         try:
             while True:
                 time.sleep(30)
         except KeyboardInterrupt:
             self.observer.stop()
 
+
 class Handler(FileSystemEventHandler):
 
     @staticmethod
     def on_any_event(event):
-
+        repo = git.Repo(self.folder_location)
+        existing_branch = repo.heads('main')
+        origin = repo.remote(name="origin")
         if event.is_directory:
             return
         if event.event_type == "created":
-            print(f"Created: {event.src_path}")
+            repo.index.add(event.src_path)
         elif event.event_type == "modified":
-            print(f"Modified: {event.src_path}")
+            repo.index.add(event.src_path)
+        repo.index.commit(f"file {event.src_path} modified")
+        origin.push()
 
 
 if __name__ == "__main__":
